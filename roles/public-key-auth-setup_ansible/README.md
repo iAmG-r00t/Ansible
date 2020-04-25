@@ -5,7 +5,7 @@ This is the ansible automation for the SSH Public Key Authentication set up.
 * This will create one SSH Key with a password and copy the Public Key to the servers.
 - This means that you will now use one SSH key to authenicate with the multiple servers.
 + All the files (Password.txt, Private and Public Keys) will be available at the files directory in the public-key-setup_role directory.
-* It also installs mosh on the remote hosts, if you aren't using mosh you are missing out some great tool visit [Mosh website](https://mosh.org/# to learn more about mosh).
+* It also installs mosh on the remote hosts, if you aren't using mosh you are missing out some great tool visit [Mosh website](https://mosh.org/#) to learn more about mosh.
 
 # Note
 
