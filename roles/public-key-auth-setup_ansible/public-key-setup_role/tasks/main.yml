@@ -1,0 +1,10 @@
+---
+# tasks file for public-key-setup_role
+
+- name: Start with the localhost tasks first
+  include: 'localhost_tasks.yml'
+  tags: localhost_tasks
+
+- name: Continue with remote tasks next
+  include: 'remotehost_tasks.yml'
+  tags: remotehost_tasks

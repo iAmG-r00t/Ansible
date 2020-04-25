@@ -1,0 +1,7 @@
+---
+# handlers file for public-key-setup_role
+
+- name: restart ssh
+  service:
+    name: sshd
+    state: restarted

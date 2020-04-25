@@ -1,0 +1,6 @@
+---
+# defaults file for public-key-setup_role
+
+# path to save the passwd file and generated public key
+store_files_path: 'public-key-setup_role/files'
+sshd_config_file_path: '/etc/ssh/sshd_config'
