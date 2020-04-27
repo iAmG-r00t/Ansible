@@ -4,12 +4,12 @@ This is the ansible automation for the SSH Public Key Authentication set up.
 
 * This will create one SSH Key with a password and copy the Public Key to the servers.
 - This means that you will now use one SSH key to authenicate with the multiple servers.
-+ All the files (Password.txt, Private and Public Keys) will be available at the files directory in the public-key-setup_role directory.
++ All the files (Password.txt, Private and Public Keys) will be available at the **files** directory in the **public-key-setup_role** directory.
 * It also installs mosh on the remote hosts, if you aren't using mosh you are missing out some great tool visit [Mosh website](https://mosh.org/#) to learn more about mosh.
 
 # Note
 
-- Do note that when you are running the playbook again, make sure you **SAVE** previous generated SSH Key and password because the will be **DELETED**.
+- Do note that when you are running the playbook again, make sure you **SAVE** previous generated SSH Key and password because they will be **DELETED**.
 + Password generated is 30 strings long
 * SSH Key generated is an RSA-4096
 
@@ -41,8 +41,8 @@ For optimal use, use ansible version greater than 2.5
 On the client:
 
 ```bash
-git clone https://github.com/iAmG-r00t/Ansible/roles/public-key-auth-setup_ansible.git
-cd public-key-auth-setup_ansible
+git clone https://github.com/iAmG-r00t/Ansible.git
+cd Ansible/roles/public-key-auth-setup_ansible
 ```
 
 Edit the hosts file in that folder and fill in the IP field with the  server IP's
@@ -70,8 +70,8 @@ cat public-key-setup_role/files/password.txt
 ```bash
 ssh-keygen -f public-key-setup_role/files/SSH-Key -y
 ```
-- If it displays you the private key then you are good to go, follow the below steps to complete.
-* Now we proceed to add the private key to your ~/.ssh/ folder
+- If it displays the private key then you are good to go, follow the below steps to complete.
+* Next we proceed to add the private key to your ~/.ssh/ folder
 + Best practice is to rename the files to a different name, for easy tracking.
 
 3. Move files to the .ssh folder on the home directory
