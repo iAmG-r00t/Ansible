@@ -1,0 +1,12 @@
+# More User and Password creation stuff... https://lebenplusplus.de/2017/04/19/creating-users-and-their-passwords-with-ansible/
+- name: Creating user "{{echoing_user_name.stdout}}"  with sudo rights
+  when: inventory_hostname in groups['Servers']
+  user:
+    name: "{{username}}"
+    password: "{{password}}"
+    groups:
+      - sudo
+    state: present
+    shell: /bin/bash
+    system: no
+    createhome: yes

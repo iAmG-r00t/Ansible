@@ -1,0 +1,14 @@
+---
+- name: Disbaling both root and password authentication !!
+  when: inventory_hostname in groups['Servers']
+  lineinfile:
+    dest: "{{sshd_config_file_path}}"
+    regexp: "{{item.From}}"
+    line: "{{item.To}}"
+    state: present
+    backup: yes
+  with_items:
+    - { From: "^PasswordAuthentication", To: "PasswordAuthentication no" }
+    - { From: "^PermitRootLogin", To: "PermitRootLogin no" }
+  notify:
+    - restart ssh

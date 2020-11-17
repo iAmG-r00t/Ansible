@@ -1,0 +1,24 @@
+---
+- name: Move 10-help-text to 10-help-text.bak
+  when: inventory_hostname in groups['Servers']
+  command: mv /etc/update-motd.d/10-help-text /etc/update-motd.d/10-help-text.bak
+
+- name: Move 00-header to 00-header.bak
+  when: inventory_hostname in groups['Servers']
+  command: mv /etc/update-motd.d/00-header /etc/update-motd.d/00-header.bak
+
+- name: Copy 00-header to 10-help-text
+  when: inventory_hostname in groups['Servers']
+  command: cp /etc/update-motd.d/00-header.bak /etc/update-motd.d/10-help-text
+
+- name: Create our new 00-header file
+  when: inventory_hostname in groups['Servers']
+  lineinfile:
+    dest: "{{doc_links_file_path}}"
+    line: "{{item}}"
+    state: present
+    create: yes
+  with_items:
+    - printf "\n"
+    - exec /usr/bin/figlet -c -f bubble "$(hostname)" | /usr/games/lolcat -f; exec /usr/bin/figlet -c -f digital  "Welcome $(grep 'sshd' '{{auth_path}}' | awk '/session opened for user/{print $11}' | tail -1)" | /usr/games/lolcat -f; exec /usr/bin/figlet -c -f term " - Enjoy Your Stay Here Sir - "
+    - printf "\n"

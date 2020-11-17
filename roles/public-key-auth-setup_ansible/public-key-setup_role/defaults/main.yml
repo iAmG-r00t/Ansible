@@ -2,5 +2,10 @@
 # defaults file for public-key-setup_role
 
 # path to save the passwd file and generated public key
-store_files_path: 'public-key-setup_role/files'
-sshd_config_file_path: '/etc/ssh/sshd_config'
+store_files_path: "public-key-setup_role/SSH-keys"
+# sshd config file path
+sshd_config_file_path: "/etc/ssh/sshd_config"
+# motd helper file path
+doc_links_file_path: "/etc/update-motd.d/10-help-text"
+# ssh auth path name
+auth_path: "/var/log/auth.log"

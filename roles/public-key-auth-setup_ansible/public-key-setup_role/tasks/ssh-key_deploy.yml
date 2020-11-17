@@ -1,0 +1,8 @@
+---
+# User Creation and SSH-Key Deply stuff: https://lebenplusplus.de/2017/04/19/creating-users-and-their-passwords-with-ansible/
+- name: Deploy Public Key to the server
+  when: inventory_hostname in groups['Servers']
+  authorized_key:
+    user: "{{hostvars['new-user']['user']}}"
+    state: present
+    key: "{{ lookup('file', hostvars['save']['dir'] ~ '/SSH-Key.pub') }}"

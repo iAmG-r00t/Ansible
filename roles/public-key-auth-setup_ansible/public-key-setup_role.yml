@@ -1,8 +1,7 @@
 ---
-
-- name: Setup SSH Public Key Authentication on multiple remote servers
+- name: Setup SSH Public Key Authentication on multiple target hosts
   hosts: all
   #become: true
   gather_facts: true
   roles:
-    - {role: 'public-key-setup_role', tags: 'ssh-auth'}
+    - { role: "public-key-setup_role", tags: "ssh-auth" }

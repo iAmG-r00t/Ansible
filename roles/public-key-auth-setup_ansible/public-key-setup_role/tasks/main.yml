@@ -1,10 +1,60 @@
 ---
 # tasks file for public-key-setup_role
 
-- name: Start with the localhost tasks first
-  include: 'localhost_tasks.yml'
-  tags: localhost_tasks
+- name: First create necessary  directories and take note of host and ips.
+  include: "preparations.yml"
+  tags: prepare
 
-- name: Continue with remote tasks next
-  include: 'remotehost_tasks.yml'
-  tags: remotehost_tasks
+- name: Proceed with random user creation
+  include: "user_creation.yml"
+  tags: user_creation
+
+- name: SSH Key creation
+  include: "ssh-key_creation.yml"
+  tags: ssh-key_creation
+
+- name: Deploying SSH Key
+  include: "ssh-key_deploy.yml"
+  tags: ssh-key_deployment
+
+- name: Install required packages for the remote hosts
+  include: "remote_packages.yml"
+  tags: remote_packages
+
+- name: Setting some parameters for SSHD config file
+  include: "sshd_config.yml"
+  tags: sshd_config
+
+- name: Set Banner for the remote hosts
+  include: "set_banner.yml"
+  tags: set_banner
+
+# Below will assit in doing the following;
+#   - Create a new user with your preferred *user-name* and *password*
+#   - Deploy your own SSH Key without creating one
+# Good resource on passing variables from command line : https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#passing-variables-on-the-command-line
+
+# How to execute the create user and password to your liking.
+# Here I am sure errors will be present because of the sudo privilege escalation ..
+# .. that's if you are running this command as not root
+# ansible-playbook public-key-setup_role.yml --tags own_user -u root -k -i hosts --extra-vars="user=yourusername pass=yourpassword"
+
+- name: Create User and Password to your liking - will only run if the own_user tag is supplied
+  include: "users_user-creation.yml"
+  vars:
+    username: user
+    password: pass
+  tags: ["never", "own_user"]
+
+# How to execute the deploy your own ssh key tasks.
+# It may face some errors due to the sudo privilege escalation that I am yet to implement ..
+# ..that's if you are running this command as not root
+# Source: https://groups.google.com/g/ansible-project/c/553v9wTGbk4
+# ansible-playbook public-key-setup_role.yml --tags own_key -u root -k -i hosts --extra-vars="user=username sshkey=/path/to/public/ssh/key"
+
+- name: Delpoy your own SSH Key - will only run if the own_key tag is supplied
+  include: "users_ssh-key.yml"
+  vars:
+    username: user
+    sshfile: sshkey
+  tags: ["never", "own_key"]

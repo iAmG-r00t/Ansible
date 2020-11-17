@@ -1,0 +1,43 @@
+---
+- name: Generate a Random User Name for the new user
+  when: inventory_hostname in groups['local']
+  shell: gpw 1 5 | tee "{{hostvars['save']['dir']}}/user_name.txt"
+
+- name: Echoing Username to place as variable
+  when: inventory_hostname in groups['local']
+  shell: cat "{{hostvars['save']['dir']}}/user_name.txt"
+  register: echoing_user_name
+
+- name: Generate a Password for the new user
+  when: inventory_hostname in groups['local']
+  shell: pwgen -N 1 -s 20 | tee "{{hostvars['save']['dir']}}/user_pass.txt"
+
+- name: Echoing Password to place as variable
+  when: inventory_hostname in groups['local']
+  shell: cat "{{hostvars['save']['dir']}}/user_pass.txt"
+  register: echoing_user_passwd
+
+# The password_hash is for hashing the password.. source@https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-generate-encrypted-passwords-for-the-user-module
+- name: Hash User password to pass it to the user module
+  when: inventory_hostname in groups['local']
+  shell: mkpasswd --method=sha-512 "{{echoing_user_passwd.stdout}}"
+  register: hashed_passwd
+
+- name: Add variables username:"{{echoing_user_name.stdout}}" and password:***** as a 'new-user' host
+  add_host:
+    name: "new-user"
+    user: "{{echoing_user_name.stdout}}"
+    pass: "{{hashed_passwd.stdout}}"
+
+# More User and Password creation stuff... https://lebenplusplus.de/2017/04/19/creating-users-and-their-passwords-with-ansible/
+- name: Creating user "{{echoing_user_name.stdout}}"  with sudo rights
+  when: inventory_hostname in groups['Servers']
+  user:
+    name: "{{hostvars['new-user']['user']}}"
+    password: "{{hostvars['new-user']['pass']}}"
+    groups:
+      - sudo
+    state: present
+    shell: /bin/bash
+    system: no
+    createhome: yes

@@ -2,5 +2,5 @@
 localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3
 
 [Servers]
-<place-IP-here> ansible_python_interpreter=/usr/bin/python3
-<place-IP-here> ansible_python_interpreter=/usr/bin/python3
+<IP >ansible_python_interpreter=/usr/bin/python3
+<IP >ansible_python_interpreter=/usr/bin/python3

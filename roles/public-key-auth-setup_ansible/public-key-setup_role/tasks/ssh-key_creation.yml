@@ -1,0 +1,13 @@
+---
+- name: Generate a Password for the SSH keys
+  when: inventory_hostname in groups['local']
+  shell: pwgen -N 1 -s 30 | tee "{{hostvars['save']['dir']}}/ssh-key_passphrase.txt"
+
+- name: Echoing Password to place as variable
+  when: inventory_hostname in groups['local']
+  shell: cat "{{hostvars['save']['dir']}}/ssh-key_passphrase.txt"
+  register: echoing_passwd
+
+- name: Create Public Key with the password
+  when: inventory_hostname in groups['local']
+  shell: ssh-keygen -f "{{hostvars['save']['dir']}}/SSH-Key" -t rsa -b 4096 -N "{{echoing_passwd.stdout}}"

@@ -1,0 +1,29 @@
+---
+# Want to learn about timestamps check this site: http://www.mydailytutorials.com/working-date-timestamp-ansible/
+- name: Create Directory with timestamp to store the data if it doesn't exist
+  when: inventory_hostname in groups['local']
+  file:
+    path: "{{store_files_path}}/{{ansible_date_time.date}}"
+    state: directory
+    mode: "0755"
+
+- name: Create Directory with timestamp to store data that was run multiple times that day
+  when: inventory_hostname in groups['local']
+  file:
+    path: "{{store_files_path}}/{{ansible_date_time.date}}/{{ansible_date_time.time}}"
+    state: directory
+    mode: "0755"
+  register: dir_path
+
+- name: Add dir path:"{{dir_path.path}}" as a 'save' host
+  when: inventory_hostname in groups['local']
+  add_host:
+    name: "save"
+    dir: "{{dir_path.path}}"
+
+# Don't want to use a template review this site: https://datacadamia.com/infra/ansible/group
+- name: Create File with hosts and IP address from template host_file.j2
+  when: inventory_hostname in groups['local']
+  template:
+    src: host_file.j2
+    dest: "{{hostvars['save']['dir']}}/hosts.txt"

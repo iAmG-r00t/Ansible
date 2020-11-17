@@ -1,0 +1,11 @@
+---
+- name: Install required packages remotely
+  when: inventory_hostname in groups['Servers']
+  package:
+    name:
+      - mosh
+      - figlet
+      - lolcat
+    update_cache: yes
+    state: present
+  ignore_errors: yes
